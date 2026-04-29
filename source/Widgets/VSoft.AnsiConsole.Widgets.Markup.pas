@@ -59,9 +59,9 @@ type
 function Markup(const source : string) : IMarkup; overload;
 function Markup(const source : string; const baseStyle : TAnsiStyle) : IMarkup; overload;
 
-{ Escape markup metacharacters. Spectre's rule: '[' becomes '[[' so it
-  won't be interpreted as the start of a tag. Useful when interpolating
-  user input into markup strings. }
+{ Escape markup metacharacters. Both '[' and ']' must be doubled - the
+  tokenizer treats an unescaped ']' as an error, not just '['. Useful
+  when interpolating user input into markup strings. }
 function EscapeMarkup(const value : string) : string;
 
 implementation
@@ -84,18 +84,23 @@ end;
 function EscapeMarkup(const value : string) : string;
 var
   i : Integer;
+  ch : Char;
 begin
   result := '';
-  // Cheap two-pass: build the escaped string char by char. Spectre's rule
-  // is "[" -> "[[" so the parser sees a literal bracket. Pascal-style
+  // Spectre's rule: "[" -> "[[" and "]" -> "]]" so the parser sees a
+  // literal bracket. Both must be escaped - the tokenizer raises on an
+  // unescaped ']' just as it does on an unterminated '['. Pascal-style
   // string concatenation is fine for the prompt/title strings this is
-  // typically used on - we don't need a SBuilder for short strings.
+  // typically used on.
   for i := 1 to Length(value) do
   begin
-    if value[i] = '[' then
+    ch := value[i];
+    if ch = '[' then
       result := result + '[['
+    else if ch = ']' then
+      result := result + ']]'
     else
-      result := result + value[i];
+      result := result + ch;
   end;
 end;
 

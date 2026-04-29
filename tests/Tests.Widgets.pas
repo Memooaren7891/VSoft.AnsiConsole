@@ -33,7 +33,8 @@ type
 
     [Test] procedure Text_Empty_RendersNothing;
     [Test] procedure Text_WithLineBreak_SplitsLines;
-    [Test] procedure Markup_EscapeMarkup_DoublesOpeningBracket;
+    [Test] procedure Markup_EscapeMarkup_DoublesBothBrackets;
+    [Test] procedure Markup_EscapeMarkup_RoundTripsThroughParser;
     [Test] procedure Markup_NestedTags_CombineStyles;
     [Test] procedure Markup_OverflowEllipsis_TruncatesWideLine;
     [Test] procedure Rule_StyleAppliesToBorder;
@@ -45,6 +46,8 @@ implementation
 
 uses
   System.SysUtils,
+  VSoft.AnsiConsole.Segment,
+  VSoft.AnsiConsole.Markup.Parser,
   Testing.AnsiConsole;
 
 const
@@ -176,13 +179,32 @@ begin
     'Embedded LF should produce a line break in the rendered Text');
 end;
 
-procedure TWidgetTests.Markup_EscapeMarkup_DoublesOpeningBracket;
+procedure TWidgetTests.Markup_EscapeMarkup_DoublesBothBrackets;
 begin
-  // EscapeMarkup turns "[" into "[[" so the parser sees a literal bracket.
-  Assert.AreEqual('plain [[bracket]', EscapeMarkup('plain [bracket]'),
-    'Open bracket should be doubled; close bracket left alone');
+  // The tokenizer rejects an unescaped ']' just as it cannot interpret a
+  // bare '[', so EscapeMarkup must double both characters.
+  Assert.AreEqual('plain [[bracket]]', EscapeMarkup('plain [bracket]'),
+    'Both open and close brackets should be doubled');
   Assert.AreEqual('no brackets here', EscapeMarkup('no brackets here'),
     'Strings without brackets should pass through unchanged');
+  Assert.AreEqual(']]', EscapeMarkup(']'),
+    'A lone close bracket must be escaped to ]]');
+end;
+
+procedure TWidgetTests.Markup_EscapeMarkup_RoundTripsThroughParser;
+var
+  raw    : string;
+  segs   : TAnsiSegments;
+begin
+  // The point of EscapeMarkup is that its output is safe to feed back
+  // into the markup parser. Anything containing a ']' regressed before
+  // the fix because only '[' was being doubled.
+  raw := 'name=[John]; tags=[a,b]';
+  segs := ParseMarkup(EscapeMarkup(raw));
+  Assert.AreEqual<Integer>(1, Length(segs),
+    'Escaped input should parse to a single text segment');
+  Assert.AreEqual(raw, segs[0].Value,
+    'Round-tripping through EscapeMarkup + ParseMarkup must yield the original text');
 end;
 
 procedure TWidgetTests.Markup_NestedTags_CombineStyles;

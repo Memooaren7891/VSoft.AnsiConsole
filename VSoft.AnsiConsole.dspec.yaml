@@ -6,6 +6,7 @@ metadata:
   authors: [ Vincent Parrett ]
   projectUrl: https://github.com/VSoftTechnologies/VSoft.AnsiConsole
   repositoryUrl: https://github.com/VSoftTechnologies/VSoft.AnsiConsole
+  repositoryCommit: #HASH#
   license: MIT
   copyright: Vincent Parrett and contributors
   tags:

@@ -72,7 +72,7 @@ uses
 var
   srcTree           : ITree;
   projTree          : ITree;
-  core, widgets, docs : ITreeNode;
+  core, widgetsNode, docs : ITreeNode;
   themePicker : ISelectionPrompt<string>;
   featurePicker : IMultiSelectionPrompt<string>;
   regionPicker  : ISelectionPrompt<string>;
@@ -227,11 +227,11 @@ begin
     core.AddNode('Color.pas');
     core.AddNode('Style.pas');
     core.AddNode('Segment.pas');
-    widgets := srcTree.AddNode('[aqua]Widgets[/]');
-    widgets.AddNode('Text.pas');
-    widgets.AddNode('Panel.pas');
-    widgets.AddNode('Table.pas');
-    widgets.AddNode('Tree.pas');
+    widgetsNode := srcTree.AddNode('[aqua]Widgets[/]');
+    widgetsNode.AddNode('Text.pas');
+    widgetsNode.AddNode('Panel.pas');
+    widgetsNode.AddNode('Table.pas');
+    widgetsNode.AddNode('Tree.pas');
     docs := srcTree.AddNode('[aqua]docs[/]');
     docs.AddNode('README.md');
     AnsiConsole.Write(srcTree);
@@ -253,7 +253,7 @@ begin
       AnsiConsole.WriteLine;
 
       AnsiConsole.Status
-        .WithSpinner(skDots)
+        .WithSpinner(TSpinnerKind.Dots)
         .Start('[yellow]Processing...[/]',
           procedure(const ctx : IStatus)
           begin
@@ -268,31 +268,31 @@ begin
       AnsiConsole.WriteLine('[bold]Spinner gallery[/]');
       AnsiConsole.WriteLine;
 
-      AnsiConsole.Status.WithSpinner(skClock)
+      AnsiConsole.Status.WithSpinner(TSpinnerKind.Clock)
         .Start('[aqua]Clock spinner[/]', procedure(const ctx : IStatus) begin Sleep(1500); end);
 
-      AnsiConsole.Status.WithSpinner(skEarth)
+      AnsiConsole.Status.WithSpinner(TSpinnerKind.Earth)
         .Start('[lime]Earth spinner[/]', procedure(const ctx : IStatus) begin Sleep(1500); end);
 
-      AnsiConsole.Status.WithSpinner(skBouncingBar)
+      AnsiConsole.Status.WithSpinner(TSpinnerKind.BouncingBar)
         .Start('[yellow]Bouncing bar[/]', procedure(const ctx : IStatus) begin Sleep(1500); end);
 
-      AnsiConsole.Status.WithSpinner(skMoon)
+      AnsiConsole.Status.WithSpinner(TSpinnerKind.Moon)
         .Start('[fuchsia]Moon phases[/]', procedure(const ctx : IStatus) begin Sleep(2000); end);
 
-      AnsiConsole.Status.WithSpinner(skHearts)
+      AnsiConsole.Status.WithSpinner(TSpinnerKind.Hearts)
         .Start('[red]Hearts[/]', procedure(const ctx : IStatus) begin Sleep(1500); end);
 
-      AnsiConsole.Status.WithSpinner(skArc)
+      AnsiConsole.Status.WithSpinner(TSpinnerKind.Arc)
         .Start('[aqua]Arc (minimal unicode)[/]', procedure(const ctx : IStatus) begin Sleep(1500); end);
 
-      AnsiConsole.Status.WithSpinner(skMaterial)
+      AnsiConsole.Status.WithSpinner(TSpinnerKind.Material)
         .Start('[silver]Material (long cycle)[/]', procedure(const ctx : IStatus) begin Sleep(2500); end);
 
-      AnsiConsole.Status.WithSpinner(skPong)
+      AnsiConsole.Status.WithSpinner(TSpinnerKind.Pong)
         .Start('[grey]Pong[/]', procedure(const ctx : IStatus) begin Sleep(2000); end);
 
-      AnsiConsole.Status.WithSpinner(skPipe)
+      AnsiConsole.Status.WithSpinner(TSpinnerKind.Pipe)
         .Start('[olive]Pipe (ASCII-safe box drawing)[/]', procedure(const ctx : IStatus) begin Sleep(1500); end);
 
       // Custom spinner built from a user-supplied frame list + interval.
@@ -319,7 +319,7 @@ begin
           Widgets.ProgressBarColumn(40),
           Widgets.PercentageColumn,
           Widgets.RemainingTimeColumn,
-          Widgets.SpinnerColumn(skDefault)])
+          Widgets.SpinnerColumn(TSpinnerKind.Default)])
         .Start(
           procedure(const ctx : IProgress)
           var
@@ -375,7 +375,7 @@ begin
       AnsiConsole.MarkupLine('[bold]Transfer view[/]');
       Progress(AnsiConsole.Console)
         .WithColumns([
-          Widgets.SpinnerColumn(skDots),
+          Widgets.SpinnerColumn(TSpinnerKind.Dots),
           Widgets.DescriptionColumn,
           Widgets.ProgressBarColumn(30),
           Widgets.DownloadedColumn,
@@ -404,7 +404,7 @@ begin
       AnsiConsole.MarkupLine('[bold]Styled columns[/]');
       Progress(AnsiConsole.Console)
         .WithColumns([
-          Widgets.SpinnerColumn(skArrow2)
+          Widgets.SpinnerColumn(TSpinnerKind.Arrow2)
             .WithStyle(TAnsiStyle.Plain.WithForeground(TAnsiColor.Fuchsia))
             .WithCompletedStyle(TAnsiStyle.Plain.WithForeground(TAnsiColor.Lime))
             .WithCompletedText('DONE'),
@@ -440,7 +440,7 @@ begin
       AnsiConsole.MarkupLine('[bold]Indeterminate task[/]');
       Progress(AnsiConsole.Console)
         .WithColumns([
-          Widgets.SpinnerColumn(skDots),
+          Widgets.SpinnerColumn(TSpinnerKind.Dots),
           Widgets.DescriptionColumn,
           Widgets.ProgressBarColumn(40),
           Widgets.ElapsedColumn])
@@ -465,7 +465,7 @@ begin
     AnsiConsole.Write(Widgets.Rule('Prompts'));
     AnsiConsole.WriteLine;
 
-    name := AnsiConsole.Ask('[bold]Name[/]', 'World');
+    name := AnsiConsole.TextPrompt.WithAllowEmpty(false).WithDefault('World').Show(AnsiConsole.Console);// Ask('[bold]Name[/]', 'World');
     // Generic typed prompt - parses Integer via the built-in RTTI
     // dispatcher; default applied on Enter-with-empty-input.
     age := AnsiConsole.Ask<Integer>('[bold]Age[/]', 30);

